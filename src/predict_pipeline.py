@@ -60,12 +60,12 @@ class PredictPipeline:
         bounding boxes and object detection results
         """
         try:
-            queries = ['solar panel', 'pool']
+            queries = ['solar panel', 'pool'] * len(images)
             inputs = self.processor(text=queries, images=images, return_tensors='pt')
 
             with torch.no_grad():
                 outputs = self.model(**inputs)
-                target_sizes = torch.tensor([img.size[::-1] for img in images])
+                target_sizes = [img.size[::-1] for img in images]
                 results = self.processor.post_process_object_detection(
                     outputs, 
                     threshold=0.3,

@@ -3,6 +3,7 @@ Stores functions used across the app
 """
 import os
 import io
+import json
 import hashlib
 import base64
 import requests 
@@ -68,3 +69,24 @@ def read_gcs(bucket_name, object_name, local_file_path):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(object_name)
     blob.download_to_filename(local_file_path)
+
+def read_gcs_json(bucket_name, object_name):
+    """
+    Reads file (object_name) from GCP bucket (bucket_name)
+    and stores in local_file_path
+    """
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(object_name)
+    data = blob.download_as_string()
+    return json.loads(data)
+
+def gsc_path_exists(bucket_name, path):
+    """
+    Check if a path within a GCS bucket exists
+    """
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blobs = bucket.list_blobs(prefix=path, max_results=1)
+
+    return next(iter(blobs), None) is not None
