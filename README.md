@@ -7,6 +7,7 @@ This repo implements data ingestion and prediction pipeline to detect pools and 
 2. Filter based on projected max panel count (to decrease number of images have to process) from Solar API
 3. Geocode remaining addresses
 4. Retrieve raw satellite images from Maps Static API
+<br>
 **Prediction**:
 1. Take raw images and pass through model
 2. Cache outputs of previous queries to GCS
