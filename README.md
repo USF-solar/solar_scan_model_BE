@@ -1,5 +1,5 @@
 # Solar Scan
-This repo implements data ingestion and prediction pipeline to detect pools and existing solar panels from satellite image data, in order to prioritize leads for small/medium solar panel installation companies. The data ingestion pipeline takes zip code, city, and state as inputs. The data is processed to retrieve raw satellite images, which are then passed to the prediction pipeline. The prediction pipleine then performs object detection using the OWLv2 model from HuggingFace. It returns whether the objects of interest were detecte and output images with bounding boxes (which are then base64 encoded). Currently, the output is limited to 5 due to latency in calling the model. The endpoints are generated with Flask and scaled with Google Cloud Run. 
+This repo implements data ingestion and prediction pipeline to detect pools and existing solar panels from satellite image data, in order to prioritize leads for small/medium solar panel installation companies. The data ingestion pipeline takes zip code, city, and state as inputs. The data is processed to retrieve raw satellite images, which are then passed to the prediction pipeline. The prediction pipleine then performs object detection using the OWLv2 model from HuggingFace. It returns whether the objects of interest were detected and output images with bounding boxes (which are then base64 encoded) to the front end. Currently, the output is limited to 5 due to latency in calling the model. The endpoints are generated with Flask and scaled with Google Cloud Run. 
 
 ### 1. Pipelines
 **1.1 Data Ingestion**: 
@@ -12,7 +12,7 @@ This repo implements data ingestion and prediction pipeline to detect pools and 
 **1.2 Prediction**:
 1. Take raw images and pass through model
 2. Cache outputs of previous queries to GCS
-3. Return outputs
+3. Return outputs to front end
 
 ### 2. Usage
 **2.1 Accessing Endpoint**:
