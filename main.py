@@ -8,10 +8,6 @@ from src.utils import base64_convert, upload_gcs, gsc_path_exists, read_gcs_json
 app = Flask(__name__, template_folder='templates')
 CORS(app)
 
-@app.route('/')
-def index():
-    render_template('index.html')
-
 @app.route('/output')
 def get_output():
     zip_code = request.args.get('zip_code')
