@@ -8,6 +8,7 @@ This repo implements data ingestion and prediction pipeline to detect pools and 
 3. Geocode remaining addresses
 4. Retrieve raw satellite images from Maps Static API
 <br>
+
 **Prediction**:
 1. Take raw images and pass through model
 2. Cache outputs of previous queries to GCS
