@@ -1,25 +1,31 @@
 # Solar Scan
-This repo implements data ingestion and prediction pipeline to detect pools and existing solar panels from satellite image data, in order to prioritize leads for small/medium solar panel installation companies. The data ingestion pipeline takes zip code, city, and state as inputs. The data is processed to retrieve raw satellite images, which are then passed to the prediction pipeline. The prediction pipleine then performs object detection using the OWLv2 model from HuggingFace. It returns whether the objects of interest were detected and output images with bounding boxes (which are then base64 encoded) to the front end. Currently, the output is limited to 5 due to latency in calling the model. The endpoints are generated with Flask and scaled with Google Cloud Run. 
+This project automates the data ingestion and prediction processes to identify potential customers for small and medium-sized solar panel installation companies.
 
-### 1. Pipelines
-**1.1 Data Ingestion**: 
-1. Input: zip code, city, and state
-2. Filter based on projected max panel count (to decrease number of images have to process) from Solar API
-3. Geocode remaining addresses
-4. Retrieve raw satellite images from Maps Static API
+### 1. Key Features
+**1.1 Data Ingestion Pipeline**: 
+1. Takes user-provided zip code, city, and state as input
+2. Filter potential locations based on projected max panel count (using Solar API) to optimize processing
+3. Geocode remaining addresses for accurate location data 
+4. Retrieve raw satellite images from Google Maps Static API
 <br>
 
-**1.2 Prediction**:
-1. Take raw images and pass through model
-2. Cache outputs of previous queries to GCS
-3. Return outputs to front end
+**1.2 Prediction Pipeline**:
+1. Analyzes retrieved satellite images using a pre-trained object detection model (OWLv2 from HuggingFace)
+2. Labels potential customer locations without existing solar panels or with pools (proxy for energy consumption)
+3. Cache outputs for efficiency (stored in Google Cloud Storage)
+4. Return outputs to front end including:
+   - Object Detection results (pool and/or solar panels)
+   - Output image with bounding boxes (base64 encoded for efficient transmission)
 
-### 2. Usage
-**2.1 Accessing Endpoint**:
-- The app is deployed on Google Cloud Run using a Docker container, so it should be ready to use as is 
+### 2. Deployment and Usage
+**2.1 Deployment**:
+- The endpoints are generated with flask and the application is deployed on Google Cloud Run using a Docker container. This ensures easy access and scalability.
+  
+**2.2 Accessing Endpoint**:
+- Since the app is deployed on Google Cloud Run, it should be ready to use as is 
 - URL Parameters:
-    - `zip_code`: US postal code
-    - `city`: Name of city in zip code
-    - `state`: US state of city and zip code
+    - `zip_code`: US postal code (i.e. 95123)
+    - `city`: Name of city in zip code (i.e. San Jose)
+    - `state`: US state of city and zip code (i.e. CA)
 
 Example request URL: `https://solar-scan-app-z6nwk7pxdq-uw.a.run.app/output?zip_code=95123&city=San%20Jose&state=CA`
